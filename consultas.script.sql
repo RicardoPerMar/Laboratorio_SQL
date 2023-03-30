@@ -64,20 +64,23 @@ from Playlist p
 inner join PlaylistTrack pt on p.PlaylistId = pt.PlaylistId
 inner join Track t on t.TrackId = pt.TrackId
 where t.Composer like 'Queen'
-
-
-select p.PlaylistId, p.Name, count(t.Name) as Number_Track
-from Playlist p
-inner join PlaylistTrack pt on p.PlaylistId = pt.PlaylistId
-inner join Track t on t.TrackId = pt.TrackId
-where t.Composer like 'Queen'
 group by p.PlaylistId, p.Name
 
-
 -- Listar las pistas que no están en ninguna playlist
+select *
+from Track t
+right join PlaylistTrack pt on t.TrackId = pt.TrackId
+where pt.TrackId is null
 
 -- Listar los artistas que no tienen album
+select *
+from Artist a
+left join Album ab on a.ArtistId = ab.ArtistId
+where ab.Title is null
 
 /*Listar los artistas con el número de albums que tienen
 Para saber si está bien, asegurate que algunos de los artistas de la query anterior (artistas sin album) aparecen en este listado con 0 albums*/
-
+select a.Name, count(ab.AlbumId) as Number_Album
+from Artist a
+left join Album ab on a.ArtistId = ab.ArtistId
+group by a.Name
